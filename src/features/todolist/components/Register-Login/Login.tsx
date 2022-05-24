@@ -9,7 +9,6 @@ import { login } from '../../api/auth.api';
 import { AuthInputType } from '../../types/types';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../app/store';
-import { getIsLogin } from '../../redux/authSlice';
 
 function Login(){
     const dispatch = useAppDispatch();
@@ -35,7 +34,6 @@ function Login(){
 
     const submitLogin = async (initValues: AuthInputType) => {
         await dispatch(login(initValues));
-        //console.log(isLogin);
         if (isLogin){
             goToHome();
         }

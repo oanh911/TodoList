@@ -36,7 +36,6 @@ export const register = createAsyncThunk(
 export const login = createAsyncThunk(
     '/auth/loginStatus',
     async ({email, password}: AuthInputType, { dispatch }) => {
-        console.log({email, password});
         try {
             const response = await userAPI
                 .post('login', {

@@ -36,7 +36,6 @@ function Register(){
 
     const submitRegister = async (initValues: AuthInputType) => {
         await dispatch(register(initValues));
-        console.log(isRegister);
         if (isRegister){
             goToLogin();
         }

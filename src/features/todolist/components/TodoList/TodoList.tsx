@@ -41,7 +41,6 @@ function TodoList(){
                     </div>
                     <div>
                         <AddTodo />
-
                         <table className='todolist'>
                         <thead>
                             <tr>
