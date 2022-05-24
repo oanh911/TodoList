@@ -1,3 +1,7 @@
+.add-todo {
+    margin-top: 20px;
+}
+
 .add-todo input {
     width: 240px;
     height: 40px;

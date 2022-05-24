@@ -1,3 +1,27 @@
+.navbar {
+    width: 740px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.navbar > img {
+    width: 48px;
+    height: 30px;
+}
+
+.navbar > button {
+    width: 80px;
+    height: 30px;
+    border: none;
+    margin-right: 0;
+    border-radius: 3px;
+    color: white;
+    background-color: #026cf7;
+}
+
 table, th, td {
     border: 1px solid gray;
     border-collapse: collapse;

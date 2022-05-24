@@ -1,27 +1,27 @@
 import './AddTodo.css';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from "../../../../app/store";
+import { useAppDispatch } from './../../../../app/hooks';
 import { creatNewTodo, getTodoList } from '../../api/todolist.api';
 
 function AddTodo(){
-    const [newTodo, setNewTodo] = useState<string>('');
-    const dispatch = useDispatch<AppDispatch>();
+    const [newTodoTitle, setNewTodoTitle] = useState<string>('');
+    const dispatch = useAppDispatch();
     
     const getNewTodoTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewTodo(event.target.value);
+        setNewTodoTitle(event.target.value);
     }
 
-    const submitCreateNewTodo = async (todoTitle: string) => {
-        await dispatch(creatNewTodo(todoTitle));
-        dispatch(getTodoList());
-        setNewTodo('');
+    const submitCreateNewTodo = async () => {
+        if (newTodoTitle) {
+            await dispatch(creatNewTodo(newTodoTitle));
+            setNewTodoTitle('');
+        }
     }
 
     return (
         <div className="add-todo">
-            <input placeholder="Enter title" value={newTodo} onChange={getNewTodoTitle}></input>
-            <button onClick={() => {submitCreateNewTodo(newTodo)}}>Add</button>
+            <input placeholder="Enter title" value={newTodoTitle} onChange={getNewTodoTitle}></input>
+            <button onClick={submitCreateNewTodo}>Add</button>
         </div>
     );
 }

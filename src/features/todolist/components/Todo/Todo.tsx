@@ -1,19 +1,17 @@
 import './Todo.css';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from "../../../../app/store";
-import { updateTodo, editTodo, deleteTodo, getTodoList } from './../../api/todolist.api';
+import { useAppDispatch } from './../../../../app/hooks';
+import { updateTodo, editTodo, deleteTodo } from './../../api/todolist.api';
 import { TodoType } from './../../types/types';
 
 function Todo(todo: TodoType){
     const [editedTodo, setEditedTodo] = useState<string>('');
     const [isEditDisplay, setIsEditDisplay] = useState<boolean>(true);
     const [editTodoId, setEditTodoId] = useState<number>(0);
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
 
-    const submitUpdateTodo = async (todoId: number, todoStatus: string) => {
-        await dispatch(updateTodo({todoId, todoStatus}));
-        dispatch(getTodoList());
+    const submitUpdateTodo = (todo: TodoType) => {
+        dispatch(updateTodo(todo));
     }
 
     const displayEditTodo = (todoId: number) => {
@@ -29,17 +27,19 @@ function Todo(todo: TodoType){
         setEditedTodo(event.target.value);
     }
 
-    const submitEditTodo = async (todoId: number, todoTitle: string) => {
+    const submitEditTodo = async (todo: TodoType) => {
+        const newTodo = {
+            ...todo,
+            title: editedTodo
+        }
         await dispatch(
-            editTodo({todoId, todoTitle})
+            editTodo(newTodo)
         );
         cancelEditTodo();
-        dispatch(getTodoList());
     }
 
-    const submitDeleteTodo = async (todoId: number) => {
-        await dispatch(deleteTodo(todoId));
-        dispatch(getTodoList());
+    const submitDeleteTodo = (todoId: number) => {
+        dispatch(deleteTodo(todoId));
     }
 
     return (
@@ -57,18 +57,18 @@ function Todo(todo: TodoType){
                 {(editTodoId === todo.id) ?
                     (isEditDisplay) ? 
                         <div>
-                            <button className='update-btn' onClick={() => {submitUpdateTodo(todo.id, todo.status)}}>Update</button>
+                            <button className='update-btn' onClick={() => {submitUpdateTodo(todo)}}>Update</button>
                             <button className='edit-btn' onClick={() => {displayEditTodo(todo.id)}}>Edit</button>
                             <button className='delete-btn' onClick={() => {submitDeleteTodo(todo.id)}}>Delete</button>
                         </div>
                         :
                         <div className='edit-todo-action'>
-                            <button className='update-edit-btn' onClick={() => {submitEditTodo(todo.id, editedTodo)}}>OK</button>
+                            <button className='update-edit-btn' onClick={() => {submitEditTodo(todo)}}>OK</button>
                             <button className='cancel-edit-btn' onClick={cancelEditTodo}>Cancel</button>
                         </div>
                     :
                     <div>
-                        <button className='update-btn' onClick={() => {submitUpdateTodo(todo.id, todo.status)}}>Update</button>
+                        <button className='update-btn' onClick={() => {submitUpdateTodo(todo)}}>Update</button>
                         <button className='edit-btn' onClick={() => {displayEditTodo(todo.id)}}>Edit</button>
                         <button className='delete-btn' onClick={() => {submitDeleteTodo(todo.id)}}>Delete</button>
                     </div>

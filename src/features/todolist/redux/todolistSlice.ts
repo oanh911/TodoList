@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getTodoList, updateTodo, creatNewTodo, editTodo, deleteTodo } from '../api/todolist.api';
-import { TodoType } from './../types/types';
+import { getTodoList} from '../api/todolist.api';
+import { TodoType, TodoActionType } from './../types/types';
 
 interface TodoState {
     loaded: boolean,
@@ -13,30 +13,14 @@ const initialState: TodoState = {
 };
 
 export const todolistSlice = createSlice({
-    name: 'posts',
+    name: 'todos',
     initialState,
     reducers: {
     },
     extraReducers: (buider) => {
-        buider.addCase(getTodoList.fulfilled, (state: TodoState, action: any) => {
+        buider.addCase(getTodoList.fulfilled, (state: TodoState, action: TodoActionType) => {
             state.loaded = true;
             state.todos = action.payload;
-        });
-        
-        buider.addCase(creatNewTodo.fulfilled, (state: TodoState, action: any) => {
-            //state.todos = action.payload;
-        });
-
-        buider.addCase(updateTodo.fulfilled, (state: TodoState, action: any) => {
-            //state.todos = action.payload;
-        });
-
-        buider.addCase(editTodo.fulfilled, (state: TodoState, action: any) => {
-            //state.todos = action.payload;
-        });
-
-        buider.addCase(deleteTodo.fulfilled, (state: TodoState, action: any) => {
-            // console.log(action.payload);
         });
     }
 })
