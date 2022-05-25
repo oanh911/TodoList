@@ -1,16 +1,5 @@
 import { Config } from '@testing-library/user-event/dist/types/setup';
 
-export interface TodoType {
-    id: number,
-    title: string,
-    status: string
-}
-
-export enum TodoStatus {
-    inProgress = "In progress",
-    done = "Done"
-}
-
 export interface InputType {
     name: string,
     type: string,
@@ -21,15 +10,8 @@ export interface InputType {
 }
 
 export interface AuthType {
-    id: number,
-    token: string
-}
-
-export interface AuthState {
-    isRegister: boolean,
-    isLogin: boolean,
-    isStillLogin: boolean,
-    auth: AuthType
+    id?: number | null,
+    token: string | null
 }
 
 export interface AuthInputType {
@@ -46,19 +28,6 @@ export interface ResponseAuthType {
     statusText: string,
 }
 
-export interface ResponseTodoType {
-    config: Config,
-    data: TodoType,
-    headers: Headers,
-    request: Request,
-    status: number,
-    statusText: string,
-}
-
-export interface ErrorType {
-    
-}
-
 export interface AuthActionType {
     meta: {
         arg: AuthInputType,
@@ -66,16 +35,6 @@ export interface AuthActionType {
         requestStatus: string
     }
     payload: AuthType,
-    type: string
-}
-
-export interface TodoActionType {
-    meta: {
-        arg: void,
-        requestId: string,
-        requestStatus: string
-    }
-    payload: TodoType[],
     type: string
 }
 

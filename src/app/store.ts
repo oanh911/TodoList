@@ -1,8 +1,8 @@
 import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import todoListReducer from './../features/todolist/redux/todolistSlice';
-import authReducer from './../features/todolist/redux/authSlice';
+import todoListReducer from '../features/todolist/redux/todolist.slice';
+import authReducer from '../features/auth/redux/auth.slice';
 
 const reducer = combineReducers({
   todos: todoListReducer,

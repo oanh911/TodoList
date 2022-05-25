@@ -1,18 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
-import TodoList from './features/todolist/components/TodoList/TodoList';
-import Login from './features/todolist/components/Register-Login/Login';
-import Register from './features/todolist/components/Register-Login/Register';
+import Login from './features/auth/screens/LoginScreen/LoginScreen';
+import Register from './features/auth/screens/RegisterScreen/RegisterScreen';
+import Home from './features/home/screens/HomeScreens/HomeScreen';
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/register" component={Register}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/" exact component={TodoList}/>
+          <Route exact path="/register" component={Register}/>
+          <Route exact path="/login" component={Login}/>
+          <Route exact path="/" component={Home}/>
         </Switch>
       </Router>
     </div>

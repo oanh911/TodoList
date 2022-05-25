@@ -1,7 +1,9 @@
 import './AddTodo.css';
-import { useState } from 'react';
+import { useState } from "react";
+import { TodoStatus } from "../../constants/todolist.enums";
+import { createNewTodo } from "../../redux/todolist.slice";
 import { useAppDispatch } from './../../../../app/hooks';
-import { creatNewTodo, getTodoList } from '../../api/todolist.api';
+
 
 function AddTodo(){
     const [newTodoTitle, setNewTodoTitle] = useState<string>('');
@@ -13,7 +15,11 @@ function AddTodo(){
 
     const submitCreateNewTodo = async () => {
         if (newTodoTitle) {
-            await dispatch(creatNewTodo(newTodoTitle));
+            const newTodo = {
+                title: newTodoTitle,
+                status: TodoStatus.inProgress
+            }
+            await dispatch(createNewTodo(newTodo));
             setNewTodoTitle('');
         }
     }

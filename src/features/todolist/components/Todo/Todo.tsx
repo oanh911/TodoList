@@ -1,8 +1,8 @@
-import './Todo.css';
+import './Todo.css'
 import { useState } from 'react';
 import { useAppDispatch } from './../../../../app/hooks';
-import { updateTodo, editTodo, deleteTodo } from './../../api/todolist.api';
-import { TodoType } from './../../types/types';
+import { updateTodo, editTodo, deleteTodo } from '../../redux/todolist.slice';
+import { TodoType } from './../../types/todolist.types';
 
 function Todo(todo: TodoType){
     const [editedTodo, setEditedTodo] = useState<string>('');
@@ -32,9 +32,7 @@ function Todo(todo: TodoType){
             ...todo,
             title: editedTodo
         }
-        await dispatch(
-            editTodo(newTodo)
-        );
+        await dispatch(editTodo(newTodo));
         cancelEditTodo();
     }
 

@@ -1,39 +1,27 @@
-import './Login.css';
-import { useAppDispatch } from './../../../../app/hooks';
-import { BrowserRouter as Router, Switch, Route, Link, useHistory } from 'react-router-dom';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import '../screens.css';
 import logo from '../../../../logo.png';
-import { InputTag } from './Register';
-import { login } from '../../api/auth.api';
-import { AuthInputType } from '../../types/types';
+import { Link, useHistory } from 'react-router-dom';
+import { useAppDispatch } from './../../../../app/hooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../app/store';
+import { AuthInputType } from '../../types/auth.types';
+import { Formik, Form } from 'formik';
+import InputTag from './../../components/InputTag/InputTag';
+import { initValuesLoginForm, validateLoginForm } from './../../helpers/auth.helpers';
+import { login } from '../../redux/auth.slice';
 
 function Login(){
     const dispatch = useAppDispatch();
     const history = useHistory();
     let isLogin: boolean = useSelector((state: RootState) => state.auth.isLogin);
 
-    const initValues = {
-        email: '',
-        password: ''
-    }
 
     const goToHome = () => {
         history.push('/');
     }
-    
-    const validate = Yup.object({
-        email: Yup.string()
-            .email('Vui lòng nhập đúng định dạng')
-            .required('Không để trống trường này'),
-        password: Yup.string()
-            .required('Không để trống trường này')
-    })
 
-    const submitLogin = async (initValues: AuthInputType) => {
-        await dispatch(login(initValues));
+    const submitLogin = async (initValuesLoginForm: AuthInputType) => {
+        await dispatch(login(initValuesLoginForm));
         if (isLogin){
             goToHome();
         }
@@ -44,7 +32,7 @@ function Login(){
         <div className='login-form'>
             <img alt='logo' src={logo} />
             <p>Đăng nhập</p>
-            <Formik initialValues={initValues} validationSchema={validate} onSubmit={submitLogin}>
+            <Formik initialValues={initValuesLoginForm} validationSchema={validateLoginForm} onSubmit={submitLogin}>
                 <Form>
                     <InputTag name='email' type='email' placeholder='Tên đăng nhập' />
                     <InputTag name='password' type='password' placeholder='Mật khẩu' />
