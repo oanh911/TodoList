@@ -1,14 +1,13 @@
 import { userAPI } from "../../../api/api";
 import { AuthEndPointsEnum } from "../constants/auth.endpoints";
-import { AuthInputType } from "../types/auth.types";
-import { ResponseAuthType } from './../types/auth.types';
+import { RequestRegisterType, RequestLoginType, ResponseRegisterType, ResponseLoginType } from './../types/auth.types';
 
 
-const registerApi = (data: AuthInputType): Promise<ResponseAuthType> => {
+const registerApi = (data: RequestRegisterType): Promise<ResponseRegisterType> => {
     return userAPI.post(AuthEndPointsEnum.REGISTER, data);
 }
 
-const loginApi = (data: AuthInputType): Promise<ResponseAuthType> => {
+const loginApi = (data: RequestLoginType): Promise<ResponseLoginType> => {
     return userAPI.post(AuthEndPointsEnum.LOGIN, data);
 }
 

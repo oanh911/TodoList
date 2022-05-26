@@ -1,8 +1,16 @@
-import { InputType } from '../../types/auth.types';
 import { useField } from 'formik';
-import './InputTag.css';
+import './InputField.css';
 
-function InputTag(props: InputType){
+export interface InputType {
+    name: string,
+    type: string,
+    placeholder?: string,
+    value?: string
+    hint?: string
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+function InputField(props: InputType){
     const [field, meta] = useField(props);
     return (
         <>
@@ -12,4 +20,4 @@ function InputTag(props: InputType){
     );
 }
 
-export default InputTag;
+export default InputField;

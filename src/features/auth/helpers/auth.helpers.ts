@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
-import { AuthInputType } from '../types/auth.types';
+import { RequestLoginType, RequestRegisterType } from '../types/auth.types';
 
-export const initValuesRegisterForm: AuthInputType = {
+export const initValuesRegisterForm: RequestRegisterType = {
     email: '',
     password: ''
 };
@@ -16,7 +16,7 @@ export const validateRegisterForm = Yup.object({
         .max(32, 'Vui lòng nhập không quá 32 kí tự'),
 });
 
-export const initValuesLoginForm: AuthInputType = {
+export const initValuesLoginForm: RequestLoginType = {
     email: '',
     password: ''
 };

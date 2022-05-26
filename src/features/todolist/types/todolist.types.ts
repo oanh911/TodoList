@@ -16,13 +16,3 @@ export interface ResponseTodoType {
     status: number,
     statusText: string,
 }
-
-export interface TodoActionType {
-    meta: {
-        arg: void,
-        requestId: string,
-        requestStatus: string
-    }
-    payload: TodoType[],
-    type: string
-}

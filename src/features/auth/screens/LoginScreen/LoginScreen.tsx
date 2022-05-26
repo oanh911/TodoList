@@ -1,31 +1,29 @@
-import '../screens.css';
+import './LoginScreen.css';
 import logo from '../../../../logo.png';
 import { Link, useHistory } from 'react-router-dom';
 import { useAppDispatch } from './../../../../app/hooks';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../../app/store';
-import { AuthInputType } from '../../types/auth.types';
 import { Formik, Form } from 'formik';
-import InputTag from './../../components/InputTag/InputTag';
 import { initValuesLoginForm, validateLoginForm } from './../../helpers/auth.helpers';
 import { login } from '../../redux/auth.slice';
+import { RequestLoginType } from './../../types/auth.types';
+import InputField from '../../../../components/InputField/InputField';
 
 function Login(){
     const dispatch = useAppDispatch();
     const history = useHistory();
-    let isLogin: boolean = useSelector((state: RootState) => state.auth.isLogin);
-
 
     const goToHome = () => {
         history.push('/');
     }
 
-    const submitLogin = async (initValuesLoginForm: AuthInputType) => {
-        await dispatch(login(initValuesLoginForm));
-        if (isLogin){
+    const submitLogin = (initValuesLoginForm: RequestLoginType) => {
+        dispatch(login(initValuesLoginForm))
+        .unwrap()
+        .then(() => {
+            alert('Đăng nhập thành công!');
             goToHome();
-        }
-        //dispatch(getIsLogin(false));
+        })
+        .catch(() => alert('Đăng nhập không thành công!'));
     }
 
     return (
@@ -34,12 +32,12 @@ function Login(){
             <p>Đăng nhập</p>
             <Formik initialValues={initValuesLoginForm} validationSchema={validateLoginForm} onSubmit={submitLogin}>
                 <Form>
-                    <InputTag name='email' type='email' placeholder='Tên đăng nhập' />
-                    <InputTag name='password' type='password' placeholder='Mật khẩu' />
-                    <InputTag type="submit" name="submit" value="Đăng nhập" />
+                    <InputField name='email' type='email' placeholder='Tên đăng nhập' />
+                    <InputField name='password' type='password' placeholder='Mật khẩu' />
+                    <InputField type="submit" name="submit" value="Đăng nhập" />
                 </Form>
             </Formik>
-            <p className='to-resgister'>Bạn chưa có tài khoản? <Link to='/register'>Đăng ký ngay </Link></p>
+            <p className='to-register'>Bạn chưa có tài khoản? <Link to='/register'>Đăng ký ngay </Link></p>
         </div>
     );
 }

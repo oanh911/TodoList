@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TodoType, createNewTodoType, TodoActionType } from './../types/todolist.types';
+import { TodoType, createNewTodoType } from './../types/todolist.types';
 import { todoListApi } from './../api/todolist.api';
 import { TodoStatus } from '../constants/todolist.enums';
 
-interface TodoState {
+export interface TodoState {
     loaded: boolean,
     todos: TodoType[]
 }
@@ -13,83 +13,67 @@ const initialState: TodoState = {
     todos: []
 }
 
-export const getTodoList = createAsyncThunk(
+export const getTodoList = createAsyncThunk<TodoType[], boolean>(
     'todos/getTodoList',
-    async () => {
+    async (param, { rejectWithValue }) => {
         try {
             const response = await todoListApi.getTodosApi();
-            if (response.status === 200){
-                return response.data;
-            }
+            return response.data;
         }
         catch(error) {
-            alert('Có lỗi xảy ra!');
+            return rejectWithValue(error);
         }
     }
 )
 
-export const createNewTodo = createAsyncThunk(
+export const createNewTodo = createAsyncThunk<void, createNewTodoType>(
     'todos/creatNewTodo',
-    async (todo: createNewTodoType, { dispatch }) => {
+    async (todo, { rejectWithValue }) => {
         try {
-            const response = await todoListApi.createNewTodoApi(`todos`, todo);
-            console.log(response)
-            if (response.status === 201) {
-                dispatch(getTodoList());
-            }
+            await todoListApi.createNewTodoApi(`todos`, todo);
         }
         catch(error) {
-            alert('Thêm mới không thành công!');
+            return rejectWithValue(error);
         }
     }
 )
 
-export const editTodo = createAsyncThunk(
+export const editTodo = createAsyncThunk<void, TodoType>(
     'todos/editTodo',
-    async (todo: TodoType, { dispatch }) => {
+    async (todo, { rejectWithValue }) => {
         try {
-            const response = await todoListApi.editTodoApi(`todos/${todo.id}`, todo);
-            if (response.status === 200 || response.status === 201) {
-                dispatch(getTodoList());
-            }
+            await todoListApi.editTodoApi(`todos/${todo.id}`, todo);
         }
         catch(error) {
-            alert('Chỉnh sửa không thành công!');
+            return rejectWithValue(error);
         }
     }
 )
 
-export const updateTodo = createAsyncThunk(
+export const updateTodo = createAsyncThunk<void, TodoType>(
     'todos/updateTodo',
-    async (todo: TodoType, { dispatch }) => {
+    async (todo, { rejectWithValue }) => {
         try {
             const newTodo = {
                 ...todo,
                 status: (todo.status === TodoStatus.inProgress) ? TodoStatus.done : TodoStatus.inProgress
             };
-            const response = await todoListApi.updateTodoApi(`todos/${todo.id}`, newTodo);
-            if (response.status === 200 || response.status === 201) {
-                dispatch(getTodoList());
-            }
+            await todoListApi.updateTodoApi(`todos/${todo.id}`, newTodo);
         }
         catch(error) {
-            console.log(error);
-            alert('Update không thành công!');
+            return rejectWithValue(error);
         }
     }
 )
 
-export const deleteTodo = createAsyncThunk(
+export const deleteTodo = createAsyncThunk<void, Pick<TodoType, 'id'> | number>(
     'todos/deleteTodo',
-    async (todoId: Pick<TodoType, 'id'> | number, { dispatch }) => {
+    async (todoId, { rejectWithValue }) => {
         try {
-            const response = await todoListApi.deleteTodoApi(`todos/${todoId}`);
-            if (response.status === 200 || response.status === 201) {
-                dispatch(getTodoList());
-            }
+            await todoListApi.deleteTodoApi(`todos/${todoId}`);
         }
         catch(error) {
-            alert('Xóa không thành công!');
+            return rejectWithValue(error);
         }
     }
 )

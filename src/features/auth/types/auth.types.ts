@@ -1,44 +1,36 @@
 import { Config } from '@testing-library/user-event/dist/types/setup';
 
-export interface InputType {
-    name: string,
-    type: string,
-    placeholder?: string,
-    value?: string
-    hint?: string
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-}
-
 export interface AuthType {
-    id?: number | null,
-    token: string | null
+    token: string
 }
 
-export interface AuthInputType {
+export interface RequestRegisterType {
     email: string,
     password: string
 }
 
-export interface ResponseAuthType {
+export interface RequestLoginType {
+    email: string,
+    password: string
+}
+
+export interface ResponseRegisterType {
     config: Config,
-    data: AuthType,
+    data: {
+        id: number,
+        token: string,
+    }
     headers: Headers,
     request: Request,
     status: number,
     statusText: string,
 }
 
-export interface AuthActionType {
-    meta: {
-        arg: AuthInputType,
-        requestId: string,
-        requestStatus: string
-    }
-    payload: AuthType,
-    type: string
-}
-
-export interface AuthStatusActionType {
-    payload: boolean,
-    type: string
+export interface ResponseLoginType {
+    config: Config,
+    data: AuthType,
+    headers: Headers,
+    request: Request,
+    status: number,
+    statusText: string,
 }

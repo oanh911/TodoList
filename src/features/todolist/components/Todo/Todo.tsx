@@ -1,7 +1,7 @@
 import './Todo.css'
 import { useState } from 'react';
 import { useAppDispatch } from './../../../../app/hooks';
-import { updateTodo, editTodo, deleteTodo } from '../../redux/todolist.slice';
+import { updateTodo, editTodo, deleteTodo, getTodoList } from '../../redux/todolist.slice';
 import { TodoType } from './../../types/todolist.types';
 
 function Todo(todo: TodoType){
@@ -10,8 +10,20 @@ function Todo(todo: TodoType){
     const [editTodoId, setEditTodoId] = useState<number>(0);
     const dispatch = useAppDispatch();
 
-    const submitUpdateTodo = (todo: TodoType) => {
-        dispatch(updateTodo(todo));
+    const handleGetTodoList = () => {
+        dispatch(getTodoList(true))
+            .unwrap()
+            .then()
+            .catch(() => alert('Lỗi tải Todolist!'))
+    }
+
+    const handleUpdateTodo = (todo: TodoType) => {
+        dispatch(updateTodo(todo))
+            .unwrap()
+            .then(() => {
+                handleGetTodoList();
+            })
+            .catch(() => alert('Cập nhật không thành công!'));
     }
 
     const displayEditTodo = (todoId: number) => {
@@ -27,17 +39,27 @@ function Todo(todo: TodoType){
         setEditedTodo(event.target.value);
     }
 
-    const submitEditTodo = async (todo: TodoType) => {
+    const handleEditTodo = (todo: TodoType) => {
         const newTodo = {
             ...todo,
             title: editedTodo
         }
-        await dispatch(editTodo(newTodo));
+        dispatch(editTodo(newTodo))
+            .unwrap()
+            .then(() => {
+                handleGetTodoList();
+            })
+            .catch(() => alert('Sửa không thành công!'));
         cancelEditTodo();
     }
 
-    const submitDeleteTodo = (todoId: number) => {
-        dispatch(deleteTodo(todoId));
+    const handleDeleteTodo = (todoId: number) => {
+        dispatch(deleteTodo(todoId))
+            .unwrap()
+            .then(() => {
+                handleGetTodoList();
+            })
+            .catch(() => alert('Xóa không thành công!'));
     }
 
     return (
@@ -55,20 +77,20 @@ function Todo(todo: TodoType){
                 {(editTodoId === todo.id) ?
                     (isEditDisplay) ? 
                         <div>
-                            <button className='update-btn' onClick={() => {submitUpdateTodo(todo)}}>Update</button>
+                            <button className='update-btn' onClick={() => {handleUpdateTodo(todo)}}>Update</button>
                             <button className='edit-btn' onClick={() => {displayEditTodo(todo.id)}}>Edit</button>
-                            <button className='delete-btn' onClick={() => {submitDeleteTodo(todo.id)}}>Delete</button>
+                            <button className='delete-btn' onClick={() => {handleDeleteTodo(todo.id)}}>Delete</button>
                         </div>
                         :
                         <div className='edit-todo-action'>
-                            <button className='update-edit-btn' onClick={() => {submitEditTodo(todo)}}>OK</button>
+                            <button className='update-edit-btn' onClick={() => {handleEditTodo(todo)}}>OK</button>
                             <button className='cancel-edit-btn' onClick={cancelEditTodo}>Cancel</button>
                         </div>
                     :
                     <div>
-                        <button className='update-btn' onClick={() => {submitUpdateTodo(todo)}}>Update</button>
+                        <button className='update-btn' onClick={() => {handleUpdateTodo(todo)}}>Update</button>
                         <button className='edit-btn' onClick={() => {displayEditTodo(todo.id)}}>Edit</button>
-                        <button className='delete-btn' onClick={() => {submitDeleteTodo(todo.id)}}>Delete</button>
+                        <button className='delete-btn' onClick={() => {handleDeleteTodo(todo.id)}}>Delete</button>
                     </div>
                 }
             </td>

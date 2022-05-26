@@ -2,45 +2,52 @@ import './HomeScreen.css';
 import logo from '../../../../logo.png';
 import { useAppDispatch } from '../../../../app/hooks';
 import { useSelector } from 'react-redux';
-import { RootState } from "../../../../app/store";
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getIsStillLogin } from '../../../auth/redux/auth.slice';
 import { getTodoList } from '../../../todolist/redux/todolist.slice';
 import { logout } from '../../../auth/redux/auth.slice';
 import TodoList from './../../../todolist/components/Todolist/Todolist';
+import { RootState } from '../../../../app/store';
 
 function Home(){
     const dispatch = useAppDispatch();
     const history = useHistory();
-    const isStillLogin: boolean = useSelector((state: RootState) => state.auth.isStillLogin);
     const isLoaded: boolean = useSelector((state: RootState) => state.todos.loaded);
+    const token = useSelector((state: RootState) => state.auth.token);
+
+    const handleGetTodoList = () => {
+        dispatch(getTodoList(true))
+            .unwrap()
+            .then()
+            .catch(() => alert('Lỗi tải Todolist!'))
+    }
 
     useEffect(() => {
-        dispatch(getTodoList());
-    }, [dispatch]);
+        handleGetTodoList();
+    }, []);
+
+    const gotoLogin = () => {
+        if (!token){
+            history.push('/login');
+        }
+    }
 
     const submitLogout = () => {
-        dispatch(logout);
-        dispatch(getIsStillLogin(false));
-        history.push('/login');
-        alert('Đăng xuất thành công!');
+        dispatch(logout());
+        gotoLogin();
     }
 
     return(
-        (isStillLogin) ? 
-            (isLoaded) ? 
-                <div>
-                    <div className="navbar">
-                        <img alt='logo1' src={logo} />
-                        <button onClick={submitLogout}>Đăng xuất</button>
-                    </div>
-                    <TodoList />
+        (isLoaded) ? 
+            <div>
+                <div className="navbar">
+                    <img alt='logo1' src={logo} />
+                    <button onClick={submitLogout}>Logout</button>
                 </div>
-                :
-                null
+                <TodoList />
+            </div>
             :
-            <div><p>Bạn chưa đăng nhập. Vui lòng <Link to='/login'>đăng nhập</Link></p></div>
+            null
     );
 }
 

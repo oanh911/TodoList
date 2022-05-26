@@ -1,7 +1,7 @@
 import './AddTodo.css';
 import { useState } from "react";
 import { TodoStatus } from "../../constants/todolist.enums";
-import { createNewTodo } from "../../redux/todolist.slice";
+import { createNewTodo, getTodoList } from "../../redux/todolist.slice";
 import { useAppDispatch } from './../../../../app/hooks';
 
 
@@ -13,13 +13,25 @@ function AddTodo(){
         setNewTodoTitle(event.target.value);
     }
 
-    const submitCreateNewTodo = async () => {
+    const handleGetTodoList = () => {
+        dispatch(getTodoList(true))
+            .unwrap()
+            .then()
+            .catch(() => alert('Lỗi tải Todolist!'))
+    }
+
+    const submitCreateNewTodo = () => {
         if (newTodoTitle) {
             const newTodo = {
                 title: newTodoTitle,
                 status: TodoStatus.inProgress
             }
-            await dispatch(createNewTodo(newTodo));
+            dispatch(createNewTodo(newTodo))
+                .unwrap()
+                .then(() => {
+                    handleGetTodoList();
+                })
+                .catch(() => alert('Thêm mới không thành công!'));
             setNewTodoTitle('');
         }
     }
